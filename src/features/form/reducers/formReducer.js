@@ -1,18 +1,11 @@
-const INITIAL_STATE = {
-  items: [],
-  users: [],
-  subtotal: 0,
-  tax: 0,
-  tip: 0,
-  total: 0,
-  superUser: '',
-};
+import { combineReducers } from 'redux';
 
-const formReducer = (state = INITIAL_STATE, action) => {
-  switch (action.type) {
-    default:
-      return state
-  }
-};
+import costFormReducer from './costFormReducer';
+import itemFormReducer from './itemFormReducer';
+import userFormReducer from './userFormReducer';
 
-export default formReducer;
+export default combineReducers({
+  cost: costFormReducer,
+  item: itemFormReducer,
+  user: userFormReducer,
+});

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Text, View, Button } from 'react-native';
-import { connect } from 'react-redux';
+import { View } from 'react-native';
+import { Text, Button } from 'react-native-elements';
 
-import styles from './styles'
+import styles from './styles';
+import UserFormComponent from './userFormComponent';
 
 class FormComponent extends React.Component {
   render() {
@@ -10,6 +11,7 @@ class FormComponent extends React.Component {
     return (
       <View style={styles.container}>
         <Text>FormComponent</Text>
+        <UserFormComponent/>
         <Button
           title="To Assignment"
           onPress={() =>
@@ -21,9 +23,4 @@ class FormComponent extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  const { form } = state;
-  return { form };
-}
-
-export default connect(mapStateToProps)(FormComponent);
+export default FormComponent;

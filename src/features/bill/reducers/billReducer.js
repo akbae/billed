@@ -1,6 +1,6 @@
 const INITIAL_STATE = {
   users: [],
-  superUser: '',
+  superuser: '',
 };
 
 const billReducer = (state = INITIAL_STATE, action) => {
