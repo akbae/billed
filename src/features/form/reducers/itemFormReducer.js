@@ -3,46 +3,46 @@ import { Item } from '../../../models/item';
 
 const INITIAL_STATE = {
   items: [],
-  // TextInput props
-  style: {
-    height: 100,
-    width: 100,
-  },
-  placeholder: 'Add Item',
 };
 
-const userFormReducer = (state = INITIAL_STATE, action) => {
+const itemFormReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case ADD_ITEM: {
       const { items } = state;
 
-      const { name, price } = action.payload;
-      items.push(new Item(name, price));
+      const changedItems = [
+        ...items.slice(),
+        new Item('Item ' + items.length, '0.00')
+      ];
 
-      const newState = { items };
-      return newState;
+      return { items: changedItems };
     }
     case EDIT_ITEM: {
       const { items } = state;
+      const { itemIndex, name } = action.payload;
 
-      const { itemIndex, name, price } = action.payload;
-      items[itemIndex].update(name, price);
+      const changedItems = items.map((item, index) => {
+        if(index !== itemIndex) {
+          return item;
+        }
 
-      const newState = { items };
-      return newState;
+        return new Item(name);
+      })
+
+      return { items: changedItems };
     }
     case REMOVE_ITEM: {
       const { items } = state;
-
       const { itemIndex } = action.payload;
-      items.splice(itemIndex, 1);
 
-      const newState = { items };
-      return newState;
+      let changedItems = items.slice()
+      changedItems.splice(itemIndex, 1);
+
+      return { items: changedItems };
     }
     default:
       return state
   }
 };
 
-export default userFormReducer;
+export default itemFormReducer;

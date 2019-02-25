@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Text, Input, Button, ListItem, Icon } from 'react-native-elements';
+import { Input, Button, ListItem, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -12,7 +12,6 @@ class UserFormComponent extends React.Component {
     const { users } = this.props;
     return (
       <View style={styles.userFormView}>
-        <Text>UserFormComponent</Text>
         {
           users.map((user, index) => (
             <ListItem
@@ -27,6 +26,7 @@ class UserFormComponent extends React.Component {
               onPressRightIcon={() => this.props.removeUser(index)}
               title={(
                 <Input
+                  style={styles.userFormListItemInput}
                   value={user.name}
                   onChangeText={(text) => this.props.editUser(index, text)}
                 />

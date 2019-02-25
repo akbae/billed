@@ -1,8 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Text, Button } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 
 import styles from './styles';
+import ItemFormComponent from './itemFormComponent';
 import UserFormComponent from './userFormComponent';
 
 class FormComponent extends React.Component {
@@ -10,8 +11,8 @@ class FormComponent extends React.Component {
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
-        <Text>FormComponent</Text>
         <UserFormComponent/>
+        <ItemFormComponent/>
         <Button
           title="To Assignment"
           onPress={() =>
