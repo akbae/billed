@@ -1,38 +1,29 @@
 import {
-  ADD_SUBTOTAL,
-  ADD_TAX, REMOVE_TAX,
-  ADD_TIP, REMOVE_TIP,
-  ADD_TOTAL,
+  EDIT_SUBTOTAL, EDIT_TAX, EDIT_TIP, EDIT_TOTAL,
 } from '../actions/actionTypes';
 
 const INITIAL_STATE = {
-  subtotal: 0,
-  tax: 0,
-  tip: 0,
-  total: 0,
+  subtotal: '0.00',
+  tax: '',
+  tip: '',
+  total: '0.00',
 };
 
 const formReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case ADD_SUBTOTAL: {
+    case EDIT_SUBTOTAL: {
       const { subtotal } = action.payload;
       return Object.assign({}, state, {subtotal: subtotal});
     }
-    case ADD_TAX: {
+    case EDIT_TAX: {
       const { tax } = action.payload;
       return Object.assign({}, state, {tax: tax});
     }
-    case REMOVE_TAX: {
-      return Object.assign({}, state, {tax: 0});
-    }
-    case ADD_TIP: {
+    case EDIT_TIP: {
       const { tip } = action.payload;
       return Object.assign({}, state, {tip: tip});
     }
-    case REMOVE_TIP: {
-      return Object.assign({}, state, {tip: 0});
-    }
-    case ADD_TOTAL: {
+    case EDIT_TOTAL: {
       const { total } = action.payload;
       return Object.assign({}, state, {total: total});
     }

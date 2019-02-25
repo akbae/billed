@@ -1,52 +1,37 @@
 import {
-  ADD_SUBTOTAL,
-  ADD_TAX, REMOVE_TAX,
-  ADD_TIP, REMOVE_TIP,
-  ADD_TOTAL,
+  EDIT_SUBTOTAL, EDIT_TAX, EDIT_TIP, EDIT_TOTAL,
 } from '../actions/actionTypes';
 
-export const addSubtotal = (subtotal) => (
+export const editSubtotal = (subtotal) => (
   {
-    type: ADD_SUBTOTAL,
+    type: EDIT_SUBTOTAL,
     payload: {
       subtotal: subtotal,
     },
   }
 );
 
-export const addTax = (tax) => (
+export const editTax = (tax) => (
   {
-    type: ADD_TAX,
+    type: EDIT_TAX,
     payload: {
       tax: tax,
     },
   }
 );
 
-export const removeTax = () => (
+export const editTip = (tip) => (
   {
-    type: REMOVE_TAX,
-  }
-);
-
-export const addTip = (tip) => (
-  {
-    type: ADD_TIP,
+    type: EDIT_TIP,
     payload: {
       tip: tip,
     },
   }
 );
 
-export const removeTip = () => (
+export const editTotal = (total) => (
   {
-    type: REMOVE_TAX,
-  }
-);
-
-export const addTotal = (total) => (
-  {
-    type: ADD_TOTAL,
+    type: EDIT_TOTAL,
     payload: {
       total: total,
     },

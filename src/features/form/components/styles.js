@@ -6,10 +6,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  // CostFormComponent
+  costFormView: {
+    backgroundColor: '#ccc',
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  costFormInput: {
+    flex: 1,
+  },
   // UserFormComponent
   userFormView: {
     alignItems: 'stretch',
-    backgroundColor: '#bbb',
+    backgroundColor: '#ddd',
     flex: 2,
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -22,7 +32,7 @@ const styles = StyleSheet.create({
   // ItemFormComponent
   itemFormView: {
     alignItems: 'stretch',
-    backgroundColor: '#ddd',
+    backgroundColor: '#eee',
     flex: 3,
   },
   itemFormListItem: {
