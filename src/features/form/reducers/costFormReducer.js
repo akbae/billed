@@ -13,19 +13,23 @@ const formReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case EDIT_SUBTOTAL: {
       const { subtotal } = action.payload;
-      return Object.assign({}, state, {subtotal: subtotal});
+      return Object.assign({}, state,
+        { subtotal });
     }
     case EDIT_TAX: {
       const { tax } = action.payload;
-      return Object.assign({}, state, {tax: tax});
+      return Object.assign({}, state,
+        { tax });
     }
     case EDIT_TIP: {
       const { tip } = action.payload;
-      return Object.assign({}, state, {tip: tip});
+      return Object.assign({}, state,
+        { tip });
     }
     case EDIT_TOTAL: {
       const { total } = action.payload;
-      return Object.assign({}, state, {total: total});
+      return Object.assign({}, state,
+        { total });
     }
     default:
       return state

@@ -2,10 +2,14 @@ import { combineReducers } from 'redux';
 
 import assignmentReducer from '../features/assignment/reducers/assignmentReducer';
 import billReducer from '../features/bill/reducers/billReducer';
-import formReducer from '../features/form/reducers/formReducer';
+import costFormReducer from '../features/form/reducers/costFormReducer';
+import itemFormReducer from '../features/form/reducers/itemFormReducer';
+import userFormReducer from '../features/form/reducers/userFormReducer';
 
 export default combineReducers({
   assignment: assignmentReducer,
   bill: billReducer,
-  form: formReducer,
+  costForm: costFormReducer,
+  itemForm: itemFormReducer,
+  // userForm: userFormReducer,
 });

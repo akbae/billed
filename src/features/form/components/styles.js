@@ -1,26 +1,16 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#ddd',
-    flex: 1,
-    justifyContent: 'center',
-  },
-  // CostFormComponent
-  costFormView: {
-    backgroundColor: '#ccc',
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  costFormInput: {
-    flex: 1,
-  },
   // UserFormComponent
   userFormView: {
     alignItems: 'stretch',
-    backgroundColor: '#ddd',
-    flex: 2,
+    flex: 1,
+  },
+  userFormScrollView: {
+  },
+  userFormSubView: {
+    alignItems: 'stretch',
+    flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
@@ -29,13 +19,39 @@ const styles = StyleSheet.create({
   },
   userFormListItemInput: {
   },
+  userFormAddUserButton: {
+    margin: 10,
+  },
+  userFormNavigateButton: {
+    margin: 10,
+  },
+  // CostFormComponent
+  costFormView: {
+    flex: 1,
+  },
+  costFormSubView: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  costFormInput: {
+    width: 180,
+  },
+  costFormNavigateButton: {
+    margin: 10,
+  },
   // ItemFormComponent
   itemFormView: {
     alignItems: 'stretch',
-    backgroundColor: '#eee',
-    flex: 3,
+    flex: 1,
   },
   itemFormListItem: {
+  },
+  itemFormScrollView: {
+  },
+  itemFormSubView: {
+    alignItems: 'stretch',
+    flex: 1,
   },
   itemFormListItemView: {
     flexDirection: 'row',
@@ -46,6 +62,12 @@ const styles = StyleSheet.create({
   },
   itemFormListItemPrice: {
     flex: 1,
+  },
+  itemFormAddItemButton: {
+    margin: 10,
+  },
+  itemFormNavigateButton: {
+    margin: 10,
   },
 });
 

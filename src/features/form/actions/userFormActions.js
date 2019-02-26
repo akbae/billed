@@ -10,8 +10,8 @@ export const editUser = (userIndex, name) => (
   {
     type: EDIT_USER,
     payload: {
-      userIndex: userIndex,
-      name: name,
+      userIndex,
+      name,
     },
   }
 );
@@ -20,7 +20,7 @@ export const removeUser = (userIndex) => (
   {
     type: REMOVE_USER,
     payload: {
-      userIndex: userIndex,
+      userIndex,
     },
   }
 );

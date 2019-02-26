@@ -6,7 +6,7 @@ export const editSubtotal = (subtotal) => (
   {
     type: EDIT_SUBTOTAL,
     payload: {
-      subtotal: subtotal,
+      subtotal,
     },
   }
 );
@@ -15,7 +15,7 @@ export const editTax = (tax) => (
   {
     type: EDIT_TAX,
     payload: {
-      tax: tax,
+      tax,
     },
   }
 );
@@ -24,7 +24,7 @@ export const editTip = (tip) => (
   {
     type: EDIT_TIP,
     payload: {
-      tip: tip,
+      tip,
     },
   }
 );
@@ -33,7 +33,7 @@ export const editTotal = (total) => (
   {
     type: EDIT_TOTAL,
     payload: {
-      total: total,
+      total,
     },
   }
 );

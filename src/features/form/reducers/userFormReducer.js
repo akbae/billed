@@ -3,20 +3,23 @@ import { User } from '../../../models/user';
 
 const INITIAL_STATE = {
   users: [new User('Me')],
+  userNamingCount: 0,
 };
 
 
 const userFormReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case ADD_USER: {
-      const { users } = state;
+      const { users, userNamingCount } = state;
 
+      const changedUserNamingCount = userNamingCount + 1
       const changedUsers = [
         ...users.slice(),
-        new User('User ' + users.length)
+        new User('User ' + changedUserNamingCount)
       ];
 
-      return { users: changedUsers };
+      return Object.assign({}, state,
+        { users: changedUsers, userNamingCount: changedUserNamingCount });
     }
     case EDIT_USER: {
       const { users } = state;
@@ -30,7 +33,8 @@ const userFormReducer = (state = INITIAL_STATE, action) => {
         return new User(name);
       })
 
-      return { users: changedUsers };
+      return Object.assign({}, state,
+        { users: changedUsers });
     }
     case REMOVE_USER: {
       const { users } = state;
@@ -39,7 +43,8 @@ const userFormReducer = (state = INITIAL_STATE, action) => {
       let changedUsers = users.slice()
       changedUsers.splice(userIndex, 1);
 
-      return { users: changedUsers };
+      return Object.assign({}, state,
+        { users: changedUsers });
     }
     default:
       return state

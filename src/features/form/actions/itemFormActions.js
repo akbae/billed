@@ -4,8 +4,8 @@ export const addItem = (name, price) => (
   {
     type: ADD_ITEM,
     payload: {
-      name: name,
-      price: price,
+      name,
+      price,
     },
   }
 );
@@ -14,9 +14,9 @@ export const editItem = (itemIndex, name, price) => (
   {
     type: EDIT_ITEM,
     payload: {
-      itemIndex: itemIndex,
-      name: name,
-      price: price,
+      itemIndex,
+      name,
+      price,
     },
   }
 );
@@ -24,6 +24,8 @@ export const editItem = (itemIndex, name, price) => (
 export const removeItem = (itemIndex) => (
   {
     type: REMOVE_ITEM,
-    payload: itemIndex,
+    payload: {
+      itemIndex,
+    },
   }
 );
