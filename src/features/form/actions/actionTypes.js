@@ -1,6 +1,7 @@
 export const ADD_ITEM = 'ADD_ITEM';
 export const EDIT_ITEM = 'EDIT_ITEM';
 export const REMOVE_ITEM = 'REMOVE_ITEM';
+export const SUBMIT_ITEMS = 'SUBMIT_ITEMS';
 
 export const EDIT_SUBTOTAL = 'EDIT_SUBTOTAL';
 export const EDIT_TAX = 'EDIT_TAX';

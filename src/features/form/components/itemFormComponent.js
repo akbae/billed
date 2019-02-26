@@ -4,7 +4,12 @@ import { Input, Button, ListItem, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { addItem, editItem, removeItem } from '../actions/itemFormActions';
+import {
+  addItem,
+  editItem,
+  removeItem,
+  submitItems,
+} from '../actions/itemFormActions';
 import styles from './styles';
 
 class ItemFormComponent extends React.Component {
@@ -56,7 +61,10 @@ class ItemFormComponent extends React.Component {
         <Button
           containerStyle={styles.itemFormNavigateButton}
           title='To Assignment'
-          onPress={() => navigation.navigate('Assignment')}
+          onPress={() => {
+            this.props.submitItems(items);
+            navigation.navigate('Assignment');
+          }}
         />
       </View>
     );
@@ -73,6 +81,7 @@ const mapDispatchToProps = (dispatch) => (
     addItem,
     editItem,
     removeItem,
+    submitItems,
   }, dispatch)
 );
 

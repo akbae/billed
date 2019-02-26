@@ -1,4 +1,9 @@
-import { ADD_ITEM, EDIT_ITEM, REMOVE_ITEM } from '../actions/actionTypes';
+import {
+  ADD_ITEM,
+  EDIT_ITEM,
+  REMOVE_ITEM,
+  SUBMIT_ITEMS,
+} from '../actions/actionTypes';
 
 export const addItem = (name, price) => (
   {
@@ -26,6 +31,15 @@ export const removeItem = (itemIndex) => (
     type: REMOVE_ITEM,
     payload: {
       itemIndex,
+    },
+  }
+);
+
+export const submitItems = (items) => (
+  {
+    type: SUBMIT_ITEMS,
+    payload: {
+      items,
     },
   }
 );

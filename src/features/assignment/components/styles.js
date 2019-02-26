@@ -1,11 +1,22 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  container: {
+  assignmentView: {
     flex: 1,
-    backgroundColor: '#ccc',
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  assignmentSubView: {
+    flex: 1,
+  },
+  assignmentListItem: {
+  },
+  assignmentResetButton: {
+    margin: 10,
+  },
+  assignmentSubmitButton: {
+    margin: 10,
+  },
+  assignmentNavigateButton: {
+    margin: 10,
   },
 });
 
