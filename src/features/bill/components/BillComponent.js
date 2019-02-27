@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollView, View } from 'react-native';
-import { Card, ListItem } from 'react-native-elements';
+import { Card, Divider, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -23,45 +23,74 @@ class BillComponent extends React.Component {
                 <Card
                   containerStyle={styles.billCard}
                   key={cardIndex}
-                  title='Bill'>
+                  title={'Bill ' + cardIndex}>
                   <View style={styles.billCardView}>
-                    {
-                      items.map((item, itemIndex) => (
-                        <ListItem
-                          containerStyle={styles.billCardListItem}
-                          key={itemIndex}
-                          title={item.name}
-                          subtitle={item.price.toString()}
-                        />
-                      ))
-                    }
+                    <View style={styles.billCardItemsView}>
+                      {
+                        items.map((item, itemIndex) => (
+                          <ListItem
+                            containerStyle={styles.billCardItem}
+                            rightSubtitleStyle={styles.billCardCostSubtitle}
+                            key={itemIndex}
+                            title={item.name}
+                            rightSubtitle={item.price.toFixed(2)}
+                          />
+                        ))
+                      }
+                    </View>
+                    <Divider/>
                     <View style={styles.billCardCostsView}>
-                      <ListItem
-                        containerStyle={styles.billCardCosts}
-                        title='Subtotal'
-                        subtitle={items.subtotal.toString()}
-                      />
-                      {
-                        items.tax > 0 &&
+                      <View style={styles.billCardFeesView}>
+                        {
+                          items.tax > 0 &&
+                          <ListItem
+                            containerStyle={styles.billCardCosts}
+                            titleStyle={styles.billCardCostTitle}
+                            subtitleStyle={styles.billCardCostSubtitle}
+                            title='Tax'
+                            subtitle={items.tax.toFixed(2)}
+                          />
+                        }
+                        {
+                          items.tip > 0 &&
+                          <ListItem
+                            containerStyle={styles.billCardCosts}
+                            titleStyle={styles.billCardCostTitle}
+                            subtitleStyle={styles.billCardCostSubtitle}
+                            title='Tip'
+                            subtitle={items.tip.toFixed(2)}
+                          />
+                        }
+                      </View>
+                      <View style={styles.billCardTotalsView}>
+                        {
+                          items.subtotal > 0 &&
+                          <ListItem
+                            containerStyle={styles.billCardCosts}
+                            titleStyle={styles.billCardCostTitle}
+                            subtitleStyle={styles.billCardCostSubtitle}
+                            title='Subtotal'
+                            subtitle={items.subtotal.toFixed(2)}
+                          />
+                        }
                         <ListItem
                           containerStyle={styles.billCardCosts}
-                          title='Tax'
-                          subtitle={items.tax.toString()}
+                          titleStyle={
+                            {
+                              ...styles.billCardCostTitle,
+                              ...styles.billCardTotal,
+                            }
+                          }
+                          subtitleStyle={
+                            {
+                              ...styles.billCardCostSubtitle,
+                              ...styles.billCardTotal,
+                            }
+                          }
+                          title='Total'
+                          subtitle={items.total.toFixed(2)}
                         />
-                      }
-                      {
-                        items.tip > 0 &&
-                        <ListItem
-                          containerStyle={styles.billCardCosts}
-                          title='Tip'
-                          subtitle={items.tip.toString()}
-                        />
-                      }
-                      <ListItem
-                        containerStyle={styles.billCardCosts}
-                        title='Total'
-                        subtitle={items.total.toString()}
-                      />
+                      </View>
                     </View>
                   </View>
                 </Card>

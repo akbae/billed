@@ -22,36 +22,40 @@ class CostFormComponent extends React.Component {
           <Input
             containerStyle={styles.costFormInput}
             autoCapitalize='none'
-            keyboardType='decimal-pad'
+            keyboardType='numeric'
             label='Subtotal'
             placeholder='(optional)'
+            selectTextOnFocus={true}
             value={subtotal}
             onChangeText={(subtotal) => this.props.editSubtotal(subtotal)}
           />
           <Input
             containerStyle={styles.costFormInput}
             autoCapitalize='none'
-            keyboardType='decimal-pad'
+            keyboardType='numeric'
             label='Total'
             placeholder='(required)'
+            selectTextOnFocus={true}
             value={total}
             onChangeText={(total) => this.props.editTotal(total)}
           />
           <Input
             containerStyle={styles.costFormInput}
             autoCapitalize='none'
-            keyboardType='decimal-pad'
+            keyboardType='numeric'
             label='Tax'
             placeholder='(optional)'
+            selectTextOnFocus={true}
             value={tax}
             onChangeText={(tax) => this.props.editTax(tax)}
           />
           <Input
             containerStyle={styles.costFormInput}
             autoCapitalize='none'
-            keyboardType='decimal-pad'
+            keyboardType='numeric'
             label='Tip'
             placeholder='(optional)'
+            selectTextOnFocus={true}
             value={tip}
             onChangeText={(tip) => this.props.editTip(tip)}
           />

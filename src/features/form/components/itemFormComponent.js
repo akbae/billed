@@ -38,14 +38,21 @@ class ItemFormComponent extends React.Component {
                   title={(
                     <View style={styles.itemFormListItemView}>
                       <Input
-                        style={styles.itemFormListItemName}
-                        value={item.name}
-                        onChangeText={(name) => this.props.editItem(index, name, item.price)}
+                        containerStyle={styles.itemFormListItemName}
+                        placeholder='Item'
+                        selectTextOnFocus={true}
+                        onChangeText={(name) => {
+                          this.props.editItem(index, name, item.price)
+                        }}
                       />
                       <Input
-                        style={styles.itemFormListItemPrice}
-                        value={item.price.toString()}
-                        onChangeText={(price) => this.props.editItem(index, item.name, price)}
+                        containerStyle={styles.itemFormListItemPrice}
+                        inputStyle={styles.itemFormListItemPriceInput}
+                        placeholder='0.00'
+                        selectTextOnFocus={true}
+                        onChangeText={(price) => {
+                          this.props.editItem(index, item.name, price)
+                        }}
                       />
                     </View>
                   )}

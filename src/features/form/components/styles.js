@@ -55,13 +55,15 @@ const styles = StyleSheet.create({
   },
   itemFormListItemView: {
     flexDirection: 'row',
-    paddingRight: 50,
   },
   itemFormListItemName: {
-    flex: 2,
+    flex: 3,
   },
   itemFormListItemPrice: {
     flex: 1,
+  },
+  itemFormListItemPriceInput: {
+    textAlign: 'center',
   },
   itemFormAddItemButton: {
     margin: 10,
