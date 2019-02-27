@@ -1,6 +1,6 @@
 export function Item(name, price) {
   this.name = name;
-  this.price = price;
+  this.price = parseFloat(price);
 }
 
 Item.prototype.update = (name, price) => {

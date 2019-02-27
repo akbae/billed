@@ -7,6 +7,7 @@ export const EDIT_SUBTOTAL = 'EDIT_SUBTOTAL';
 export const EDIT_TAX = 'EDIT_TAX';
 export const EDIT_TIP = 'EDIT_TIP';
 export const EDIT_TOTAL = 'EDIT_TOTAL';
+export const SUBMIT_COSTS = 'SUBMIT_COSTS';
 
 export const ADD_USER = 'ADD_USER';
 export const EDIT_USER = 'EDIT_USER';

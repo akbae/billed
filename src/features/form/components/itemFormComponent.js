@@ -44,7 +44,7 @@ class ItemFormComponent extends React.Component {
                       />
                       <Input
                         style={styles.itemFormListItemPrice}
-                        value={item.price}
+                        value={item.price.toString()}
                         onChangeText={(price) => this.props.editItem(index, item.name, price)}
                       />
                     </View>

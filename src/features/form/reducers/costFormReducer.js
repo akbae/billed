@@ -1,12 +1,12 @@
 import {
-  EDIT_SUBTOTAL, EDIT_TAX, EDIT_TIP, EDIT_TOTAL,
+  EDIT_SUBTOTAL, EDIT_TAX, EDIT_TIP, EDIT_TOTAL, SUBMIT_COSTS,
 } from '../actions/actionTypes';
 
 const INITIAL_STATE = {
-  subtotal: '0.00',
+  subtotal: '',
   tax: '',
   tip: '',
-  total: '0.00',
+  total: '',
 };
 
 const formReducer = (state = INITIAL_STATE, action) => {
@@ -30,6 +30,10 @@ const formReducer = (state = INITIAL_STATE, action) => {
       const { total } = action.payload;
       return Object.assign({}, state,
         { total });
+    }
+    case SUBMIT_COSTS: {
+      // TODO validation
+      return state;
     }
     default:
       return state

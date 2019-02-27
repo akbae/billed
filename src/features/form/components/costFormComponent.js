@@ -5,7 +5,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import {
-  editSubtotal, editTax, editTip, editTotal,
+  editSubtotal,
+  editTax,
+  editTip,
+  editTotal,
+  submitCosts,
 } from '../actions/costFormActions';
 import styles from './styles';
 
@@ -20,6 +24,7 @@ class CostFormComponent extends React.Component {
             autoCapitalize='none'
             keyboardType='decimal-pad'
             label='Subtotal'
+            placeholder='(optional)'
             value={subtotal}
             onChangeText={(subtotal) => this.props.editSubtotal(subtotal)}
           />
@@ -28,6 +33,7 @@ class CostFormComponent extends React.Component {
             autoCapitalize='none'
             keyboardType='decimal-pad'
             label='Total'
+            placeholder='(required)'
             value={total}
             onChangeText={(total) => this.props.editTotal(total)}
           />
@@ -53,7 +59,15 @@ class CostFormComponent extends React.Component {
         <Button
           containerStyle={styles.costFormNavigateButton}
           title='To Items'
-          onPress={() => navigation.navigate('ItemForm')}
+          onPress={() => {
+            this.props.submitCosts({
+              subtotal,
+              tax,
+              tip,
+              total,
+            })
+            navigation.navigate('ItemForm');
+          }}
         />
       </View>
     );
@@ -71,6 +85,7 @@ const mapDispatchToProps = (dispatch) => (
     editTax,
     editTip,
     editTotal,
+    submitCosts,
   }, dispatch)
 );
 

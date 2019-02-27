@@ -40,7 +40,7 @@ class AssignmentComponent extends React.Component {
                 title={
                   <CheckBox
                     checked={item.checked}
-                    subtitle={item.price}
+                    subtitle={item.price.toString()}
                     title={item.name}
                     onPress={() => this.props.checkItem(index)}
                   />

@@ -1,11 +1,20 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  container: {
+  billView: {
+    alignItems: 'stretch',
     flex: 1,
-    backgroundColor: '#ccc',
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  billScrollView: {
+    flex: 1,
+  },
+  billSubView: {
+  },
+  billCard: {
+  },
+  billCardView: {
+  },
+  billCardListItem: {
   },
 });
 

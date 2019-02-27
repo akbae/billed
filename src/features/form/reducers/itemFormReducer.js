@@ -22,14 +22,14 @@ const itemFormReducer = (state = INITIAL_STATE, action) => {
     }
     case EDIT_ITEM: {
       const { items } = state;
-      const { itemIndex, name } = action.payload;
+      const { itemIndex, name, price } = action.payload;
 
       const changedItems = items.map((item, index) => {
         if(index !== itemIndex) {
           return item;
         }
 
-        return new Item(name);
+        return new Item(name, price);
       })
 
       return Object.assign({}, state,

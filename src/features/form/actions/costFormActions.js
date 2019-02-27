@@ -1,5 +1,5 @@
 import {
-  EDIT_SUBTOTAL, EDIT_TAX, EDIT_TIP, EDIT_TOTAL,
+  EDIT_SUBTOTAL, EDIT_TAX, EDIT_TIP, EDIT_TOTAL, SUBMIT_COSTS,
 } from '../actions/actionTypes';
 
 export const editSubtotal = (subtotal) => (
@@ -34,6 +34,15 @@ export const editTotal = (total) => (
     type: EDIT_TOTAL,
     payload: {
       total,
+    },
+  }
+);
+
+export const submitCosts = (costs) => (
+  {
+    type: SUBMIT_COSTS,
+    payload: {
+      costs,
     },
   }
 );
