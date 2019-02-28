@@ -5,6 +5,8 @@ const items = [
   new Item('Burger', '7.50'),
   new Item('Drink', '1.50'),
   new Item('Shake', '3.00'),
+  new Item('Ice Cream', '1.00'),
+  new Item('Onion Rings', '2.00'),
 ];
 
 const assignments = [

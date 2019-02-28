@@ -9,6 +9,7 @@ import { SUBMIT_ITEMS } from '../../form/actions/actionTypes';
 import { Alert } from 'react-native';
 
 const INITIAL_STATE = {
+  assignee: '',
   unassignedItems: [],
   originalItems: [],
   assignedItemGroups: [],

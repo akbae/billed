@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, View } from 'react-native';
-import { Button, CheckBox, ListItem } from 'react-native-elements';
+import { ScrollView, View } from 'react-native';
+import { Button, Card, CheckBox, ListItem, Text } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -23,43 +23,102 @@ class AssignmentComponent extends React.Component {
 
     return (
       <View style={styles.assignmentView}>
-        <View style={styles.assignmentSubView}>
+        <View style={styles.assignmentControlsView}>
           {
             unassignedItems.length > 1 &&
             <CheckBox
-              style={styles.assignmentCheckAll}
+              containerStyle={styles.assignmentCheckAll}
               checked={unassignedItems.every(item => item.checked)}
               onPress={() => this.props.checkAllItems()}
             />
           }
-          {
-            unassignedItems.map((item, index) => (
-              <ListItem
-                style={styles.assignmentListItem}
-                key={index}
-                title={
-                  <CheckBox
-                    checked={item.checked}
-                    subtitle={item.price.toString()}
-                    title={item.name}
-                    onPress={() => this.props.checkItem(index)}
-                  />
-                }
+          <View style={styles.assignmentButtonsView}>
+            {
+              unassignedItems.length !== 0 &&
+              <Button
+                buttonStyle={styles.assignmentAssignButton}
+                containerStyle={styles.assignmentAssignButtonCtr}
+                title='Assign'
+                onPress={() => this.props.assignCheckedItems()}
               />
-            ))
-          }
+            }
+            {
+              assignedItemGroups.length > 0 &&
+              <Button
+                buttonStyle={styles.assignmentResetButton}
+                containerStyle={styles.assignmentResetButtonCtr}
+                title='Reset'
+                onPress={() => this.props.resetAssignedItems()}
+              />
+            }
+          </View>
         </View>
-        <Text>{assignedItemGroups.map(g => g.map(item => item.name).join()).join('\n')}</Text>
-        <Button
-          containerStyle={styles.assignmentResetButton}
-          title='Reset'
-          onPress={() => this.props.resetAssignedItems()}
-        />
-        <Button
-          containerStyle={styles.assignmentSubmitButton}
-          title='Submit Group'
-          onPress={() => this.props.assignCheckedItems()}
-        />
+        {
+          unassignedItems.length != 0 &&
+          <View style={styles.assignmentItemsView}>
+            <ScrollView
+              style={styles.assignmentItemsScrollView}>
+              <View style={styles.assignmentItemsSubView}>
+                {
+                  unassignedItems.map((item, index) => (
+                    <ListItem
+                      containerStyle={styles.assignmentItem}
+                      key={index}
+                      title={
+                        <CheckBox
+                          containerStyle={styles.assignmentCheckBox}
+                          checked={item.checked}
+                          title={
+                            <View style={styles.assignmentCheckBoxView}>
+                              <Text style={styles.assignmentCheckBoxText}>
+                                {item.name}
+                              </Text>
+                              <Text style={styles.assignmentCheckBoxText}>
+                                {item.price.toFixed(2)}
+                              </Text>
+                            </View>
+                          }
+                          onPress={() => this.props.checkItem(index)}
+                        />
+                      }
+                    />
+                  ))
+                }
+              </View>
+            </ScrollView>
+          </View>
+        }
+        {
+          assignedItemGroups.length != 0 &&
+          <View style={styles.assignmentGroupsView}>
+            <ScrollView
+              style={styles.assignmentGroupsScrollView}
+              ref={(ref) => this.groupsScrollView = ref}
+              onContentSizeChange={(width, height) => {
+                this.groupsScrollView.scrollTo({x: 0, y: height, animated: true})
+              }}>
+              <View style={styles.assignmentGroupsSubView}>
+                {
+                  assignedItemGroups.map((group, groupIndex) => (
+                    <Card
+                      containerStyle={styles.assignmentGroupCard}
+                      key={groupIndex}>
+                      {
+                        group.map((item, index) => (
+                          <ListItem
+                            containerStyle={styles.assignmentGroupItem}
+                            key={index}
+                            title={item.name}>
+                          </ListItem>
+                        ))
+                      }
+                    </Card>
+                  ))
+                }
+              </View>
+            </ScrollView>
+          </View>
+        }
         <Button
           containerStyle={styles.assignmentNavigateButton}
           title='To Bill'
