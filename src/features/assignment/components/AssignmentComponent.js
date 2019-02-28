@@ -8,8 +8,8 @@ import styles from './styles';
 import {
   checkItem,
   checkAllItems,
-  resetCheckedItems,
   assignCheckedItems,
+  resetAssignedItems,
   submitAssignments,
 } from '../actions/assignmentActions';
 
@@ -53,7 +53,7 @@ class AssignmentComponent extends React.Component {
         <Button
           containerStyle={styles.assignmentResetButton}
           title='Reset'
-          onPress={() => this.props.resetCheckedItems()}
+          onPress={() => this.props.resetAssignedItems()}
         />
         <Button
           containerStyle={styles.assignmentSubmitButton}
@@ -87,8 +87,8 @@ const mapDispatchToProps = (dispatch) => (
   bindActionCreators({
     checkItem,
     checkAllItems,
-    resetCheckedItems,
     assignCheckedItems,
+    resetAssignedItems,
     submitAssignments,
   }, dispatch)
 );

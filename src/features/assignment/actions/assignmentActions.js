@@ -1,8 +1,8 @@
 import {
   CHECK_ITEM,
   CHECK_ALL_ITEMS,
-  RESET_CHECKED_ITEMS,
   ASSIGN_CHECKED_ITEMS,
+  RESET_ASSIGNED_ITEMS,
   SUBMIT_ASSIGNMENTS,
 } from './actionTypes'
 
@@ -21,9 +21,9 @@ export const checkAllItems = () => (
   }
 )
 
-export const resetCheckedItems = () => (
+export const resetAssignedItems = () => (
   {
-    type: RESET_CHECKED_ITEMS,
+    type: RESET_ASSIGNED_ITEMS,
   }
 )
 

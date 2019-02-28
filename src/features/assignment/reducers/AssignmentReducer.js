@@ -1,7 +1,7 @@
 import {
   CHECK_ITEM,
   CHECK_ALL_ITEMS,
-  RESET_CHECKED_ITEMS,
+  RESET_ASSIGNED_ITEMS,
   ASSIGN_CHECKED_ITEMS,
   SUBMIT_ASSIGNMENTS,
 } from '../actions/actionTypes'
@@ -58,18 +58,6 @@ const assignmentReducer = (state = INITIAL_STATE, action) => {
         unassignedItems: changedUnassignedItems,
       });
     }
-    case RESET_CHECKED_ITEMS: {
-      const { unassignedItems, originalItems } = state;
-
-      const changedUnassignedItems = originalItems.map(item => Object.assign(item,
-        {checked: false}
-      ));
-
-      return Object.assign({}, state, {
-        unassignedItems: changedUnassignedItems,
-        assignedItemGroups: [],
-      });
-    }
     case ASSIGN_CHECKED_ITEMS: {
       const {
         unassignedItems,
@@ -92,9 +80,18 @@ const assignmentReducer = (state = INITIAL_STATE, action) => {
         assignedItemGroups: changedAssignedItemGroups,
       });
     }
-    case SUBMIT_ASSIGNMENTS: {
-      // TODO validation
-      return state;
+    case SUBMIT_ASSIGNMENTS: // Reset assignments on submission - TODO validation
+    case RESET_ASSIGNED_ITEMS: {
+      const { unassignedItems, originalItems } = state;
+
+      const changedUnassignedItems = originalItems.map(item => Object.assign(item,
+        {checked: false}
+      ));
+
+      return Object.assign({}, state, {
+        unassignedItems: changedUnassignedItems,
+        assignedItemGroups: [],
+      });
     }
     default:
       return state
