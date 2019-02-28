@@ -2,7 +2,7 @@ import { ADD_ITEM, EDIT_ITEM, REMOVE_ITEM } from '../actions/actionTypes';
 import { Item } from '../../../models/item';
 
 const INITIAL_STATE = {
-  items: [new Item('Item 1', '0.00')],
+  items: [new Item('Item 1', '')],
   itemNamingCount: 1,
 };
 
@@ -14,7 +14,7 @@ const itemFormReducer = (state = INITIAL_STATE, action) => {
       const changedItemNamingCount = itemNamingCount + 1;
       const changedItems = [
         ...items.slice(),
-        new Item('Item ' + changedItemNamingCount, '0.00')
+        new Item('Item ' + changedItemNamingCount, '')
       ];
 
       return Object.assign({}, state,
@@ -24,7 +24,14 @@ const itemFormReducer = (state = INITIAL_STATE, action) => {
       const { items } = state;
       const { itemIndex, name, price } = action.payload;
 
+      // No difference -> no state change
+      if(items[itemIndex].name === name
+          && items[itemIndex].price.toString() === price) {
+        return state;
+      }
+
       const changedItems = items.map((item, index) => {
+        // Leave other items unchanged
         if(index !== itemIndex) {
           return item;
         }

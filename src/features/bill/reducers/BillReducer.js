@@ -1,26 +1,30 @@
 import { SUBMIT_ASSIGNMENTS } from '../../assignment/actions/actionTypes';
 import { SUBMIT_COSTS } from '../../form/actions/actionTypes';
+import { Alert } from 'react-native';
 
 const INITIAL_STATE = {
   assignments: [],
-  subtotal: NaN,
-  tax: NaN,
-  tip: NaN,
+  subtotal: 0.0,
+  tax: 0.0,
+  tip: 0.0,
   total: 0.0,
 };
 
 const getBillSubtotal = (group) => (
-  group.length > 1
-  ? group.reduce((a, b) => a.price + b.price)
-  : group[0].price
-)
+  // Avoid empty array since the initial value is not the desired format (float)
+  group.length > 0
+  ? group.reduce((a, b) => a.price + b.price, { price: 0.0 })
+  : 0.0
+);
 
 const getResponsibleAmount = (amount, billSubtotal, subtotal) => (
-  (amount * billSubtotal / subtotal).toFixed(2)
+  // Prevent divide by 0, default to 0.0
+  (subtotal > 0) ? (amount * billSubtotal / subtotal) : 0.0
 );
 
 const getBillTotal = (amount, subtotal, total) => (
-  (amount * total / subtotal).toFixed(2)
+  // Prevent divide by 0, default to 0.0
+  (subtotal > 0) ? (amount * total / subtotal) : 0.0
 );
 
 const billReducer = (state = INITIAL_STATE, action) => {
@@ -28,26 +32,20 @@ const billReducer = (state = INITIAL_STATE, action) => {
     // Invoked in CostFormComponent
     case SUBMIT_COSTS: {
       const { costs } = action.payload;
-      const { subtotal, tax, tip, total } = costs;
 
-      return Object.assign({}, state, {
-        subtotal: parseFloat(subtotal),
-        tax: parseFloat(tax),
-        tip: parseFloat(tip),
-        total: parseFloat(total),
-      });
+      return Object.assign({}, state, costs);
     }
     // Invoked in AssignmentComponent
     case SUBMIT_ASSIGNMENTS: {
       const { subtotal, tax, tip, total } = state;
       const { assignedItemGroups } = action.payload;
 
-      // If subtotal was not provided, calculate
-      const _subtotal = isNaN(subtotal)
-        ? assignedItemGroups.reduce((groupA, groupB) => (
-            getBillSubtotal(groupA) + getBillSubtotal(groupB)
-          ))
-        : subtotal;
+      // Assumption that subtotal is correct due to previous validation
+      // If subtotal was not provided, calculate from items
+      const _subtotal = (subtotal > 0)
+        ? subtotal
+        : assignedItemGroups.reduce((a, b) => (
+            getBillSubtotal(a) + getBillSubtotal(b)), []);
 
       const assignments = assignedItemGroups.map(group => {
         const billSubtotal = getBillSubtotal(group);
