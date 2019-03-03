@@ -3,6 +3,10 @@ import {
 } from '../actions/actionTypes';
 
 const INITIAL_STATE = {
+  calculateTip: {
+    percent: 20,
+    withTax: true,
+  },
   subtotal: '',
   tax: '',
   tip: '',

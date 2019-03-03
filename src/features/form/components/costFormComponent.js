@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Button, Input, Icon } from 'react-native-elements';
+import { Button, CheckBox, Input, Text } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -60,8 +61,36 @@ class CostFormComponent extends React.Component {
             onChangeText={(tip) => this.props.editTip(tip)}
           />
         </View>
+        <CheckBox
+          containerStyle={styles.costFormTipCheckBox}
+          checked={false}
+          title={
+            <View style={styles.costFormTipCheckBoxView}>
+              <Text style={styles.costFormTipCheckBoxText}>
+                Calculate tip:
+              </Text>
+              <Input style={styles.costFormTipCheckBoxInput}
+                autoCapitalize='none'
+                keyboardType='numeric'
+                rightIcon={
+                  <Icon
+                    name='percent'
+                    size={20}
+                  />
+                }
+                selectTextOnFocus={true}
+              />
+              <CheckBox
+                containerStyle={styles.costFormTipTaxCheckBox}
+                checked={false}
+                title='with tax'
+              />
+            </View>
+          }
+        />
         <Button
           containerStyle={styles.costFormNavigateButton}
+          disabled={!total}
           title='To Items'
           onPress={() => {
             this.props.submitCosts({
