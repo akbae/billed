@@ -8,7 +8,7 @@ import styles from './styles'
 
 class BillComponent extends React.Component {
   render() {
-    const { assignments, navigation } = this.props;
+    const { bills, navigation } = this.props;
     return (
       <View style={styles.billView}>
         <ScrollView
@@ -19,15 +19,17 @@ class BillComponent extends React.Component {
           }}>
           <View style={styles.billSubView}>
             {
-              assignments.map((items, cardIndex) => (
-                <Card
+              [...bills.keys()].map(person => {
+                const bill = bills.get(person);
+                return (
+                  <Card
                   containerStyle={styles.billCard}
-                  key={cardIndex}
-                  title={'Bill ' + cardIndex}>
+                  key={person}
+                  title={'Bill: ' + person}>
                   <View style={styles.billCardView}>
                     <View style={styles.billCardItemsView}>
                       {
-                        items.map((item, itemIndex) => (
+                        bill.items.map((item, itemIndex) => (
                           <ListItem
                             containerStyle={styles.billCardItem}
                             rightSubtitleStyle={styles.billCardCostSubtitle}
@@ -42,35 +44,35 @@ class BillComponent extends React.Component {
                     <View style={styles.billCardCostsView}>
                       <View style={styles.billCardFeesView}>
                         {
-                          items.tax > 0 &&
+                          bill.tax > 0 &&
                           <ListItem
                             containerStyle={styles.billCardCosts}
                             titleStyle={styles.billCardCostTitle}
                             subtitleStyle={styles.billCardCostSubtitle}
                             title='Tax'
-                            subtitle={items.tax.toFixed(2)}
+                            subtitle={bill.tax.toFixed(2)}
                           />
                         }
                         {
-                          items.tip > 0 &&
+                          bill.tip > 0 &&
                           <ListItem
                             containerStyle={styles.billCardCosts}
                             titleStyle={styles.billCardCostTitle}
                             subtitleStyle={styles.billCardCostSubtitle}
                             title='Tip'
-                            subtitle={items.tip.toFixed(2)}
+                            subtitle={bill.tip.toFixed(2)}
                           />
                         }
                       </View>
                       <View style={styles.billCardTotalsView}>
                         {
-                          items.subtotal > 0 &&
+                          bill.subtotal > 0 &&
                           <ListItem
                             containerStyle={styles.billCardCosts}
                             titleStyle={styles.billCardCostTitle}
                             subtitleStyle={styles.billCardCostSubtitle}
                             title='Subtotal'
-                            subtitle={items.subtotal.toFixed(2)}
+                            subtitle={bill.subtotal.toFixed(2)}
                           />
                         }
                         <ListItem
@@ -88,13 +90,13 @@ class BillComponent extends React.Component {
                             }
                           }
                           title='Total'
-                          subtitle={items.total.toFixed(2)}
+                          subtitle={bill.total.toFixed(2)}
                         />
                       </View>
                     </View>
                   </View>
                 </Card>
-              ))
+              )})
             }
           </View>
         </ScrollView>
@@ -104,9 +106,8 @@ class BillComponent extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  // const { users } = state.userForm;
-  const { assignments } = state.bill;
-  return { assignments };
+  const { bills } = state.bill;
+  return { bills };
 }
 
 const mapDispatchToProps = (dispatch) => (

@@ -1,10 +1,19 @@
 import {
+  EDIT_ASSIGNEE,
   CHECK_ITEM,
-  CHECK_ALL_ITEMS,
   ASSIGN_CHECKED_ITEMS,
   RESET_ASSIGNED_ITEMS,
   SUBMIT_ASSIGNMENTS,
 } from './actionTypes'
+
+export const editAssignee = (update) => (
+  {
+    type: EDIT_ASSIGNEE,
+    payload: {
+      update,
+    },
+  }
+)
 
 export const checkItem = (itemIndex) => (
   {
@@ -33,11 +42,11 @@ export const assignCheckedItems = () => (
   }
 )
 
-export const submitAssignments = (assignedItemGroups) => (
+export const submitAssignments = (assignments) => (
   {
     type: SUBMIT_ASSIGNMENTS,
     payload: {
-      assignedItemGroups,
+      assignments,
     },
   }
 )

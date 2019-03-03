@@ -13,10 +13,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     margin: 5,
   },
-  assignmentCheckAll: {
+  assigneeInput: {
     flex: 1,
-    marginLeft: 16,
-    padding: 0,
+  },
+  assigneeIcon: {
+    marginRight: 5,
   },
   assignmentButtonsView: {
     alignItems: 'center',

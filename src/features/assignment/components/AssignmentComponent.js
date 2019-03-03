@@ -1,13 +1,16 @@
 import React from 'react';
 import { ScrollView, View } from 'react-native';
-import { Button, Card, CheckBox, ListItem, Text } from 'react-native-elements';
+import {
+  Button, Card, CheckBox, Input, ListItem, Text
+} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import styles from './styles';
 import {
+  editAssignee,
   checkItem,
-  checkAllItems,
   assignCheckedItems,
   resetAssignedItems,
   submitAssignments,
@@ -16,8 +19,9 @@ import {
 class AssignmentComponent extends React.Component {
   render() {
     const {
+      assignee,
       unassignedItems,
-      assignedItemGroups,
+      assignments,
       navigation,
     } = this.props;
 
@@ -25,32 +29,41 @@ class AssignmentComponent extends React.Component {
       <View style={styles.assignmentView}>
         <View style={styles.assignmentControlsView}>
           {
-            unassignedItems.length > 1 &&
-            <CheckBox
-              containerStyle={styles.assignmentCheckAll}
-              checked={unassignedItems.every(item => item.checked)}
-              onPress={() => this.props.checkAllItems()}
+            unassignedItems.length !== 0 &&
+            <Input
+              containerStyle={styles.assigneeInput}
+              leftIconContainerStyle={styles.assigneeIcon}
+              leftIcon={
+                <Icon
+                  name='user'
+                  size={20}
+                  color='grey'/>
+              }
+              placeholder='Add assignee'
+              selectTextOnFocus={true}
+              value={assignee}
+              onChangeText={(update) => this.props.editAssignee(update)}
             />
           }
           <View style={styles.assignmentButtonsView}>
-            {
-              unassignedItems.length !== 0 &&
-              <Button
-                buttonStyle={styles.assignmentAssignButton}
-                containerStyle={styles.assignmentAssignButtonCtr}
-                title='Assign'
-                onPress={() => this.props.assignCheckedItems()}
-              />
-            }
-            {
-              assignedItemGroups.length > 0 &&
-              <Button
-                buttonStyle={styles.assignmentResetButton}
-                containerStyle={styles.assignmentResetButtonCtr}
-                title='Reset'
-                onPress={() => this.props.resetAssignedItems()}
-              />
-            }
+            <Button
+              buttonStyle={styles.assignmentAssignButton}
+              containerStyle={styles.assignmentAssignButtonCtr}
+              disabled={
+                !assignee ||
+                unassignedItems.length === 0 ||
+                unassignedItems.filter(item => item.checked).length === 0
+              }
+              title='Assign'
+              onPress={() => this.props.assignCheckedItems()}
+            />
+            <Button
+              buttonStyle={styles.assignmentResetButton}
+              containerStyle={styles.assignmentResetButtonCtr}
+              disabled={assignments.size === 0}
+              title='Reset'
+              onPress={() => this.props.resetAssignedItems()}
+            />
           </View>
         </View>
         {
@@ -89,7 +102,7 @@ class AssignmentComponent extends React.Component {
           </View>
         }
         {
-          assignedItemGroups.length != 0 &&
+          assignments.size != 0 &&
           <View style={styles.assignmentGroupsView}>
             <ScrollView
               style={styles.assignmentGroupsScrollView}
@@ -99,12 +112,13 @@ class AssignmentComponent extends React.Component {
               }}>
               <View style={styles.assignmentGroupsSubView}>
                 {
-                  assignedItemGroups.map((group, groupIndex) => (
+                  [...assignments.keys()].map(person => (
                     <Card
                       containerStyle={styles.assignmentGroupCard}
-                      key={groupIndex}>
+                      key={person}
+                      title={person}>
                       {
-                        group.map((item, index) => (
+                        assignments.get(person).map((item, index) => (
                           <ListItem
                             containerStyle={styles.assignmentGroupItem}
                             key={index}
@@ -119,33 +133,36 @@ class AssignmentComponent extends React.Component {
             </ScrollView>
           </View>
         }
-        <Button
-          containerStyle={styles.assignmentNavigateButton}
-          title='To Bill'
-          onPress={() => {
-            this.props.submitAssignments(assignedItemGroups);
-            navigation.navigate('Bill');
-          }}
-        />
+        {
+          <Button
+            containerStyle={styles.assignmentNavigateButton}
+            disabled={unassignedItems.length !== 0}
+            title='To Bill'
+            onPress={() => {
+              this.props.submitAssignments(assignments);
+              this.props.navigation.navigate('Bill');
+            }}
+          />
+        }
       </View>
     );
   }
 }
 
 const mapStateToProps = (state) => {
-  // const { users } = state.userForm;
   const {
+    assignee,
     unassignedItems,
     originalItems,
-    assignedItemGroups
+    assignments,
   } = state.assignment;
-  return { unassignedItems, originalItems, assignedItemGroups };
+  return { assignee, unassignedItems, originalItems, assignments };
 }
 
 const mapDispatchToProps = (dispatch) => (
   bindActionCreators({
+    editAssignee,
     checkItem,
-    checkAllItems,
     assignCheckedItems,
     resetAssignedItems,
     submitAssignments,

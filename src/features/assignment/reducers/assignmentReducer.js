@@ -1,6 +1,6 @@
 import {
+  EDIT_ASSIGNEE,
   CHECK_ITEM,
-  CHECK_ALL_ITEMS,
   RESET_ASSIGNED_ITEMS,
   ASSIGN_CHECKED_ITEMS,
   SUBMIT_ASSIGNMENTS,
@@ -12,7 +12,7 @@ const INITIAL_STATE = {
   assignee: '',
   unassignedItems: [],
   originalItems: [],
-  assignedItemGroups: [],
+  assignments: new Map(),
 };
 
 const assignmentReducer = (state = INITIAL_STATE, action) => {
@@ -21,6 +21,7 @@ const assignmentReducer = (state = INITIAL_STATE, action) => {
     case SUBMIT_ITEMS: {
       const { items } = action.payload;
 
+      // Copy over submitted items and set checked to false
       const submittedItems = items.map(item => Object.assign(item,
         {checked: false}
       ));
@@ -30,11 +31,19 @@ const assignmentReducer = (state = INITIAL_STATE, action) => {
         originalItems: items,
       });
     }
+    case EDIT_ASSIGNEE: {
+      const { update } = action.payload;
+
+      return Object.assign({}, state,
+        {assignee: update}
+      );
+    }
     case CHECK_ITEM: {
       const { unassignedItems } = state;
       const { itemIndex } = action.payload;
 
       const changedUnassignedItems = unassignedItems.map((item, index) => {
+        // No change to other values
         if(index !== itemIndex) {
           return item;
         }
@@ -47,52 +56,51 @@ const assignmentReducer = (state = INITIAL_STATE, action) => {
         unassignedItems: changedUnassignedItems,
       });
     }
-    case CHECK_ALL_ITEMS: {
-      const { unassignedItems } = state;
-
-      const allChecked = unassignedItems.every(item => item.checked);
-      const changedUnassignedItems = unassignedItems.map(item => Object.assign(item,
-        {checked: !allChecked}
-      ));
-
-      return Object.assign({}, state, {
-        unassignedItems: changedUnassignedItems,
-      });
-    }
     case ASSIGN_CHECKED_ITEMS: {
       const {
+        assignee,
         unassignedItems,
-        assignedItemGroups,
+        assignments,
       } = state;
 
-      const assignedItemGroup = unassignedItems.filter(item => item.checked);
-      if(assignedItemGroup.length === 0) {
+      // If empty assignee or assignee is already assigned
+      if(!assignee || assignments.has(assignee)) {
+        return state;
+      }
+
+      const assignment = unassignedItems.filter(item => item.checked);
+      // If no items to assign
+      if(assignment.length === 0) {
         return state;
       }
       const changedUnassignedItems = unassignedItems.filter(item => !item.checked);
 
-      const changedAssignedItemGroups = [
-        ...assignedItemGroups.slice(),
-        assignedItemGroup,
-      ];
+      const changedAssignments = new Map(assignments);
+      changedAssignments.set(assignee, assignment);
 
       return Object.assign({}, state, {
+        assignee: '',
         unassignedItems: changedUnassignedItems,
-        assignedItemGroups: changedAssignedItemGroups,
+        assignments: changedAssignments,
       });
     }
-    case SUBMIT_ASSIGNMENTS: // Reset assignments on submission - TODO validation
+    case SUBMIT_ASSIGNMENTS:  // Reset assignments on submission
     case RESET_ASSIGNED_ITEMS: {
-      const { unassignedItems, originalItems } = state;
+      const {
+        originalItems,
+      } = state;
 
-      const changedUnassignedItems = originalItems.map(item => Object.assign(item,
+      const resetItems = originalItems.map(item => Object.assign(item,
         {checked: false}
       ));
 
-      return Object.assign({}, state, {
-        unassignedItems: changedUnassignedItems,
-        assignedItemGroups: [],
-      });
+      return Object.assign({}, state,
+        {
+          assignee: '',
+          unassignedItems: resetItems,
+          assignments: new Map(),
+        }
+      );
     }
     default:
       return state
