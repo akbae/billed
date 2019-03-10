@@ -47,6 +47,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     padding: 0,
   },
+  assignmentItemBadge: {
+    backgroundColor: 'blue',
+    flex: 0,
+  },
   assignmentCheckBox: {
     backgroundColor: 'black',
   },
@@ -71,6 +75,9 @@ const styles = StyleSheet.create({
   assignmentGroupCard: {
     backgroundColor: 'black',
     padding: 5,
+  },
+  assignmentGroupTitle: {
+    color: 'floralwhite',
   },
   assignmentGroupItem: {
     backgroundColor: 'black',

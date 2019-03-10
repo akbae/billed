@@ -17,8 +17,16 @@ const getCalculatedTip = (costs, calculateTip) => {
   return calculateTip.percent / 100.0 * baseCost;
 }
 
-const getSubtotal = (group) => {
-  return group.map(item => item.price).reduce((a, b) => (a + b), 0.0)
+const getNumSplits = (index, assignments) => {
+  return [...assignments.values()].reduce((acc, assignment) => (
+    acc + (assignment.includes(index))
+  ), 0);
+}
+
+const getSubtotal = (assignment, items) => {
+  return assignment.reduce((acc, index) => (
+    acc + items[index].price / getNumSplits(index, assignment)
+  ), 0.0);
 };
 
 const getResponsibleAmount = (amount, billSubtotal, subtotal) => (
@@ -52,7 +60,7 @@ const billReducer = (state = INITIAL_STATE, action) => {
     // Invoked in AssignmentComponent
     case SUBMIT_ASSIGNMENTS: {
       const { subtotal, tax, tip, total } = state;
-      const { assignments } = action.payload;
+      const { assignments, items } = action.payload;
 
       // Assumption that subtotal is correct due to previous validation
       // If subtotal was not provided, calculate from items
@@ -61,13 +69,13 @@ const billReducer = (state = INITIAL_STATE, action) => {
         _subtotal = subtotal;
       } else {
         for(const assignment of assignments.values()) {
-          _subtotal += getSubtotal(assignment);
+          _subtotal += getSubtotal(assignment, items);
         };
       }
 
       const bills = new Map();
       assignments.forEach((assignment, assignee) => {
-        const billSubtotal = getSubtotal(assignment);
+        const billSubtotal = getSubtotal(assignment, items);
         const billTotal = getBillTotal(billSubtotal, _subtotal, total);
         let billTax = getResponsibleAmount(tax, billSubtotal, _subtotal);
         let billTip = getResponsibleAmount(tip, billSubtotal, _subtotal);
@@ -79,7 +87,7 @@ const billReducer = (state = INITIAL_STATE, action) => {
         }
         bills.set(assignee, Object.assign({},
           {
-            items: assignment,
+            items: items.filter((item, index) => assignment.includes(index)),
             subtotal: billSubtotal,
             tax: billTax,
             tip: billTip,

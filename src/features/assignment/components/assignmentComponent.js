@@ -12,9 +12,12 @@ import {
   editAssignee,
   checkItem,
   assignCheckedItems,
-  resetAssignedItems,
+  resetAssignment,
+  resetAll,
   submitAssignments,
 } from '../actions/assignmentActions';
+
+import AssignmentItemComponent from './assignmentItemComponent';
 
 class AssignmentComponent extends React.Component {
   static navigationOptions = ({ navigation, navigationOptions }) => {
@@ -22,10 +25,29 @@ class AssignmentComponent extends React.Component {
       { title: 'Assignments' });
   }
 
+  allItemsAssigned() {
+    const { assignments, checked } = this.props;
+
+    const assignedItems = [].concat(...assignments.values());
+    return checked.every((check, index) => assignedItems.includes(index));
+  }
+
+  numAssignments(itemIndex) {
+    const { assignments } = this.props;
+    let count = 0;
+    for(const assignment of assignments.values()) {
+      count += assignment.reduce((acc, index) => (
+        acc + (index === itemIndex)
+      ), 0);
+    }
+    return count;
+  }
+
   render() {
     const {
       assignee,
-      unassignedItems,
+      checked,
+      items,
       assignments,
       navigation,
     } = this.props;
@@ -33,32 +55,28 @@ class AssignmentComponent extends React.Component {
     return (
       <View style={styles.assignmentView}>
         <View style={styles.assignmentControlsView}>
-          {
-            unassignedItems.length !== 0 &&
-            <Input
-              containerStyle={styles.assigneeInputContainer}
-              inputStyle={styles.assigneeInput}
-              leftIconContainerStyle={styles.assigneeIcon}
-              leftIcon={
-                <Icon
-                  name='user'
-                  size={20}
-                  color='grey'/>
-              }
-              placeholder='Add assignee'
-              selectTextOnFocus={true}
-              value={assignee}
-              onChangeText={(update) => this.props.editAssignee(update)}
-            />
-          }
+          <Input
+            containerStyle={styles.assigneeInputContainer}
+            inputStyle={styles.assigneeInput}
+            leftIconContainerStyle={styles.assigneeIcon}
+            leftIcon={
+              <Icon
+                name='user'
+                size={20}
+                color='grey'/>
+            }
+            placeholder='Add assignee'
+            selectTextOnFocus={true}
+            value={assignee}
+            onChangeText={(update) => this.props.editAssignee(update)}
+          />
           <View style={styles.assignmentButtonsView}>
             <Button
               buttonStyle={styles.assignmentAssignButton}
               containerStyle={styles.assignmentAssignButtonCtr}
               disabled={
                 !assignee ||
-                unassignedItems.length === 0 ||
-                unassignedItems.filter(item => item.checked).length === 0
+                checked.every(check => false)
               }
               title='Assign'
               onPress={() => this.props.assignCheckedItems()}
@@ -66,47 +84,31 @@ class AssignmentComponent extends React.Component {
             <Button
               buttonStyle={styles.assignmentResetButton}
               containerStyle={styles.assignmentResetButtonCtr}
-              disabled={assignments.size === 0}
+              disabled={checked.every(check => false) && assignments.size === 0}
               title='Reset'
-              onPress={() => this.props.resetAssignedItems()}
+              onPress={() => this.props.resetAssignment()}
+              onLongPress={() => this.props.resetAll()}
             />
           </View>
         </View>
-        {
-          unassignedItems.length != 0 &&
-          <View style={styles.assignmentItemsView}>
-            <ScrollView
-              style={styles.assignmentItemsScrollView}>
-              <View style={styles.assignmentItemsSubView}>
-                {
-                  unassignedItems.map((item, index) => (
-                    <ListItem
-                      containerStyle={styles.assignmentItem}
-                      key={index}
-                      title={
-                        <CheckBox
-                          containerStyle={styles.assignmentCheckBox}
-                          checked={item.checked}
-                          title={
-                            <View style={styles.assignmentCheckBoxView}>
-                              <Text style={styles.assignmentCheckBoxText}>
-                                {item.name}
-                              </Text>
-                              <Text style={styles.assignmentCheckBoxText}>
-                                {item.price.toFixed(2)}
-                              </Text>
-                            </View>
-                          }
-                          onPress={() => this.props.checkItem(index)}
-                        />
-                      }
-                    />
-                  ))
-                }
-              </View>
-            </ScrollView>
-          </View>
-        }
+        <View style={styles.assignmentItemsView}>
+          <ScrollView
+            style={styles.assignmentItemsScrollView}>
+            <View style={styles.assignmentItemsSubView}>
+              {
+                items.map((item, index) => (
+                  <AssignmentItemComponent
+                    key={index}
+                    assigned={this.numAssignments(index)}
+                    checked={checked[index]}
+                    item={item}
+                    index={index}
+                  />
+                ))
+              }
+            </View>
+          </ScrollView>
+        </View>
         {
           assignments.size != 0 &&
           <View style={styles.assignmentGroupsView}>
@@ -121,15 +123,16 @@ class AssignmentComponent extends React.Component {
                   [...assignments.keys()].map(person => (
                     <Card
                       containerStyle={styles.assignmentGroupCard}
+                      titleStyle={styles.assignmentGroupTitle}
                       key={person}
                       title={person}>
                       {
-                        assignments.get(person).map((item, index) => (
+                        assignments.get(person).map(index => (
                           <ListItem
                             containerStyle={styles.assignmentGroupItem}
                             titleStyle={styles.assignmentGroupItemTitle}
                             key={index}
-                            title={item.name}>
+                            title={items[index].name}>
                           </ListItem>
                         ))
                       }
@@ -143,10 +146,10 @@ class AssignmentComponent extends React.Component {
         {
           <Button
             containerStyle={styles.assignmentNavigateButton}
-            disabled={unassignedItems.length !== 0}
+            disabled={!this.allItemsAssigned()}
             title='To Bill'
             onPress={() => {
-              this.props.submitAssignments(assignments);
+              this.props.submitAssignments(assignments, items);
               this.props.navigation.navigate('Bill');
             }}
           />
@@ -159,11 +162,11 @@ class AssignmentComponent extends React.Component {
 const mapStateToProps = (state) => {
   const {
     assignee,
-    unassignedItems,
-    originalItems,
+    checked,
+    items,
     assignments,
   } = state.assignment;
-  return { assignee, unassignedItems, originalItems, assignments };
+  return { assignee, checked, items, assignments };
 }
 
 const mapDispatchToProps = (dispatch) => (
@@ -171,7 +174,8 @@ const mapDispatchToProps = (dispatch) => (
     editAssignee,
     checkItem,
     assignCheckedItems,
-    resetAssignedItems,
+    resetAssignment,
+    resetAll,
     submitAssignments,
   }, dispatch)
 );

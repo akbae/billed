@@ -1,17 +1,26 @@
 import {
   EDIT_ASSIGNEE,
   CHECK_ITEM,
-  RESET_ASSIGNED_ITEMS,
   ASSIGN_CHECKED_ITEMS,
+  RESET_ASSIGNMENT,
+  RESET_ALL,
   SUBMIT_ASSIGNMENTS,
 } from '../actions/actionTypes'
 import { SUBMIT_ITEMS } from '../../form/actions/actionTypes';
 
 const INITIAL_STATE = {
   assignee: '',
-  unassignedItems: [],
-  originalItems: [],
+  checked: [], // Item index to whether it is checked
+  items: [],
   assignments: new Map(),
+};
+
+const resetChecked = (items) => {
+  const changedChecked = [];
+  for(var i = 0; i < items.length; i++) {
+    changedChecked.push(false);
+  }
+  return changedChecked;
 };
 
 const assignmentReducer = (state = INITIAL_STATE, action) => {
@@ -20,14 +29,12 @@ const assignmentReducer = (state = INITIAL_STATE, action) => {
     case SUBMIT_ITEMS: {
       const { items } = action.payload;
 
-      // Copy over submitted items and set checked to false
-      const submittedItems = items.map(item => Object.assign(item,
-        {checked: false}
-      ));
+      // Set all item indices to checked: false
+      const checked = resetChecked(items);
 
       return Object.assign({}, state, {
-        unassignedItems: submittedItems,
-        originalItems: items,
+        checked,
+        items,
       });
     }
     case EDIT_ASSIGNEE: {
@@ -38,65 +45,78 @@ const assignmentReducer = (state = INITIAL_STATE, action) => {
       );
     }
     case CHECK_ITEM: {
-      const { unassignedItems } = state;
+      const { checked } = state;
       const { itemIndex } = action.payload;
 
-      const changedUnassignedItems = unassignedItems.map((item, index) => {
-        // No change to other values
-        if(index !== itemIndex) {
-          return item;
-        }
-
-        // Switch checked value
-        return Object.assign(item, {checked: !item.checked});
-      })
+      const changedChecked = checked.slice();
+      changedChecked[itemIndex] = !checked[itemIndex]
 
       return Object.assign({}, state, {
-        unassignedItems: changedUnassignedItems,
+        checked: changedChecked,
       });
     }
     case ASSIGN_CHECKED_ITEMS: {
-      const {
-        assignee,
-        unassignedItems,
-        assignments,
-      } = state;
+      const { assignee, checked, items, assignments } = state;
 
       // If empty assignee or assignee is already assigned
-      if(!assignee || assignments.has(assignee)) {
+      if(assignments.size > 0 && assignments.has(assignee)) {
         return state;
       }
 
-      const assignment = unassignedItems.filter(item => item.checked);
+      // Add all checked item indices to assignment
+      const assignment = checked.reduce((arr, check, index) => {
+        if(check) {
+          arr.push(index);
+        }
+        return arr;
+      }, []);
       // If no items to assign
       if(assignment.length === 0) {
         return state;
       }
-      const changedUnassignedItems = unassignedItems.filter(item => !item.checked);
 
       const changedAssignments = new Map(assignments);
       changedAssignments.set(assignee, assignment);
 
+      const changedChecked = resetChecked(items);
+
       return Object.assign({}, state, {
         assignee: '',
-        unassignedItems: changedUnassignedItems,
+        checked: changedChecked,
         assignments: changedAssignments,
       });
     }
-    case SUBMIT_ASSIGNMENTS:  // Reset assignments on submission
-    case RESET_ASSIGNED_ITEMS: {
-      const {
-        originalItems,
-      } = state;
+    case RESET_ASSIGNMENT: {
+      const { checked, items, assignments } = state;
 
-      const resetItems = originalItems.map(item => Object.assign(item,
-        {checked: false}
-      ));
+      const changedChecked = resetChecked(items);
+      // No items checked
+      if(checked.every(check => !check)) {
+        // Remove latest assignment
+        const changedAssignments = new Map([...assignments.entries()].slice(0, -1))
+
+        return Object.assign({}, state, {
+          assignee: '',
+          checked: changedChecked,
+          assignments: changedAssignments,
+        });
+      }
+
+      return Object.assign({}, state, {
+        assignee: '',
+        checked: changedChecked,
+      });
+    }
+    case SUBMIT_ASSIGNMENTS:  // Reset assignments on submission
+    case RESET_ALL: {
+      const { items } = state;
+
+      const changedChecked = resetChecked(items);
 
       return Object.assign({}, state,
         {
           assignee: '',
-          unassignedItems: resetItems,
+          checked: changedChecked,
           assignments: new Map(),
         }
       );

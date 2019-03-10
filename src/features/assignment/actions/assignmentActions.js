@@ -2,7 +2,8 @@ import {
   EDIT_ASSIGNEE,
   CHECK_ITEM,
   ASSIGN_CHECKED_ITEMS,
-  RESET_ASSIGNED_ITEMS,
+  RESET_ASSIGNMENT,
+  RESET_ALL,
   SUBMIT_ASSIGNMENTS,
 } from './actionTypes'
 
@@ -30,23 +31,30 @@ export const checkAllItems = () => (
   }
 )
 
-export const resetAssignedItems = () => (
-  {
-    type: RESET_ASSIGNED_ITEMS,
-  }
-)
-
 export const assignCheckedItems = () => (
   {
     type: ASSIGN_CHECKED_ITEMS,
   }
 )
 
-export const submitAssignments = (assignments) => (
+export const resetAssignment = () => (
+  {
+    type: RESET_ASSIGNMENT,
+  }
+)
+
+export const resetAll = () => (
+  {
+    type: RESET_ALL,
+  }
+)
+
+export const submitAssignments = (assignments, items) => (
   {
     type: SUBMIT_ASSIGNMENTS,
     payload: {
       assignments,
+      items,
     },
   }
 )
