@@ -17,6 +17,11 @@ import {
 } from '../actions/assignmentActions';
 
 class AssignmentComponent extends React.Component {
+  static navigationOptions = ({ navigation, navigationOptions }) => {
+    return Object.assign({}, navigationOptions,
+      { title: 'Assignments' });
+  }
+
   render() {
     const {
       assignee,
@@ -31,7 +36,8 @@ class AssignmentComponent extends React.Component {
           {
             unassignedItems.length !== 0 &&
             <Input
-              containerStyle={styles.assigneeInput}
+              containerStyle={styles.assigneeInputContainer}
+              inputStyle={styles.assigneeInput}
               leftIconContainerStyle={styles.assigneeIcon}
               leftIcon={
                 <Icon
@@ -121,6 +127,7 @@ class AssignmentComponent extends React.Component {
                         assignments.get(person).map((item, index) => (
                           <ListItem
                             containerStyle={styles.assignmentGroupItem}
+                            titleStyle={styles.assignmentGroupItemTitle}
                             key={index}
                             title={item.name}>
                           </ListItem>

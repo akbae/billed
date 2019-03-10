@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   assignmentView: {
+    backgroundColor: 'black',
     flex: 1,
   },
   assignmentItemsView: {
@@ -13,8 +14,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     margin: 5,
   },
-  assigneeInput: {
+  assigneeInputContainer: {
     flex: 1,
+  },
+  assigneeInput: {
+    color: 'floralwhite',
   },
   assigneeIcon: {
     marginRight: 5,
@@ -40,9 +44,11 @@ const styles = StyleSheet.create({
   assignmentItemsSubView: {
   },
   assignmentItem: {
+    backgroundColor: 'black',
     padding: 0,
   },
   assignmentCheckBox: {
+    backgroundColor: 'black',
   },
   assignmentCheckBoxView: {
     alignItems: 'center',
@@ -52,6 +58,7 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
   },
   assignmentCheckBoxText: {
+    color: 'floralwhite',
     flex: 0,
   },
   assignmentGroupsView: {
@@ -62,11 +69,16 @@ const styles = StyleSheet.create({
   assignmentGroupsSubView: {
   },
   assignmentGroupCard: {
+    backgroundColor: 'black',
     padding: 5,
   },
   assignmentGroupItem: {
+    backgroundColor: 'black',
     padding: 3,
     margin: 5,
+  },
+  assignmentGroupItemTitle: {
+    color: 'floralwhite',
   },
   assignmentNavigateButton: {
     margin: 10,

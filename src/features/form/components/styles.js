@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   // CostFormComponent
   costFormView: {
+    backgroundColor: 'black',
     flex: 1,
   },
   costFormSubView: {
@@ -10,8 +11,38 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
-  costFormInput: {
+  costFormInputContainer: {
     width: 180,
+  },
+  costFormInput: {
+    color: 'floralwhite',
+  },
+  costFormTipCheckBox: {
+    backgroundColor: 'black',
+  },
+  costFormTipCheckBoxView: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  costformTipCheckBoxContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  costFormTipCheckBoxInputContainer: {
+    width: 75,
+  },
+  costFormTipCheckBoxInput: {
+    color: 'floralwhite',
+    fontSize: 20,
+    textAlign: 'right',
+  },
+  costFormTipIncludeTax: {
+    backgroundColor: 'black',
+  },
+  costFormTipIncludeTaxTitle: {
+    color: 'steelblue',
   },
   costFormNavigateButton: {
     margin: 10,
@@ -19,9 +50,12 @@ const styles = StyleSheet.create({
   // ItemFormComponent
   itemFormView: {
     alignItems: 'stretch',
+    backgroundColor: 'black',
     flex: 1,
   },
   itemFormListItem: {
+    backgroundColor: 'black',
+    borderColor: 'steelblue',
   },
   itemFormScrollView: {
   },
@@ -31,6 +65,9 @@ const styles = StyleSheet.create({
   },
   itemFormListItemView: {
     flexDirection: 'row',
+  },
+  itemFormListItemInput: {
+    color: 'floralwhite',
   },
   itemFormListItemName: {
     flex: 3,

@@ -4,15 +4,20 @@ import { Input, Button, ListItem, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import styles from './styles';
 import {
   addItem,
   editItem,
   removeItem,
   submitItems,
 } from '../actions/itemFormActions';
-import styles from './styles';
 
 class ItemFormComponent extends React.Component {
+  static navigationOptions = ({ navigation, navigationOptions }) => {
+    return Object.assign({}, navigationOptions,
+      { title: 'Items' });
+  }
+
   render() {
     const { items, navigation } = this.props;
     return (
@@ -27,7 +32,7 @@ class ItemFormComponent extends React.Component {
             {
               items.map((item, index) => (
                 <ListItem
-                  style={styles.itemFormListItem}
+                  containerStyle={styles.itemFormListItem}
                   key={index}
                   rightIcon={
                     <Icon
@@ -39,6 +44,7 @@ class ItemFormComponent extends React.Component {
                     <View style={styles.itemFormListItemView}>
                       <Input
                         containerStyle={styles.itemFormListItemName}
+                        inputStyle={styles.itemFormListItemInput}
                         placeholder='Item'
                         selectTextOnFocus={true}
                         onChangeText={(name) => {
@@ -47,7 +53,7 @@ class ItemFormComponent extends React.Component {
                       />
                       <Input
                         containerStyle={styles.itemFormListItemPrice}
-                        inputStyle={styles.itemFormListItemPriceInput}
+                        inputStyle={[styles.itemFormListItemInput, styles.itemFormListItemPriceInput]}
                         placeholder='0.00'
                         selectTextOnFocus={true}
                         onChangeText={(price) => {

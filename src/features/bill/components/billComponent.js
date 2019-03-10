@@ -4,9 +4,14 @@ import { Card, Divider, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import styles from './styles'
+import styles from './styles';
 
 class BillComponent extends React.Component {
+  static navigationOptions = ({ navigation, navigationOptions }) => {
+    return Object.assign({}, navigationOptions,
+      { title: 'Bills' });
+  }
+
   render() {
     const { bills, subtotal, tax, tip, total, navigation } = this.props;
     return (
@@ -24,6 +29,7 @@ class BillComponent extends React.Component {
                 return (
                   <Card
                     containerStyle={styles.billCard}
+                    titleStyle={styles.billCardTitle}
                     key={person}
                     title={'Bill: ' + person}>
                     <View style={styles.billCardView}>
@@ -32,7 +38,8 @@ class BillComponent extends React.Component {
                           bill.items.map((item, itemIndex) => (
                             <ListItem
                               containerStyle={styles.billCardItem}
-                              rightSubtitleStyle={styles.billCardCostSubtitle}
+                              titleStyle={styles.billCardItemName}
+                              rightSubtitleStyle={styles.billCardItemPrice}
                               key={itemIndex}
                               title={item.name}
                               rightSubtitle={item.price.toFixed(2)}
@@ -101,6 +108,7 @@ class BillComponent extends React.Component {
             }
             <Card
               containerStyle={styles.billCard}
+              titleStyle={styles.billCardTitle}
               title='Summary'>
               <View style={styles.billCardCostsView}>
                 <View style={styles.billCardFeesView}>

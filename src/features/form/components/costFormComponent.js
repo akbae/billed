@@ -1,10 +1,18 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Button, CheckBox, Input, Text } from 'react-native-elements';
+import {
+  Button,
+  CheckBox,
+  FormInput,
+  FormLabel,
+  FormValidationMessage,
+  Input
+} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import styles from './styles';
 import {
   editSubtotal,
   editTax,
@@ -15,16 +23,21 @@ import {
   checkIncludeTax,
   submitCosts,
 } from '../actions/costFormActions';
-import styles from './styles';
 
 class CostFormComponent extends React.Component {
+  static navigationOptions = ({ navigation, navigationOptions }) => {
+    return Object.assign({}, navigationOptions,
+      { title: 'Costs' });
+  }
+
   render() {
     const { calculateTip, subtotal, tax, tip, total, navigation } = this.props;
     return (
       <View style={styles.costFormView}>
         <View style={styles.costFormSubView}>
           <Input
-            containerStyle={styles.costFormInput}
+            containerStyle={styles.costFormInputContainer}
+            inputStyle={styles.costFormInput}
             autoCapitalize='none'
             keyboardType='numeric'
             label='Subtotal'
@@ -33,7 +46,8 @@ class CostFormComponent extends React.Component {
             onChangeText={(subtotal) => this.props.editSubtotal(subtotal)}
           />
           <Input
-            containerStyle={styles.costFormInput}
+            containerStyle={styles.costFormInputContainer}
+            inputStyle={styles.costFormInput}
             autoCapitalize='none'
             keyboardType='numeric'
             label='Total'
@@ -42,7 +56,8 @@ class CostFormComponent extends React.Component {
             onChangeText={(total) => this.props.editTotal(total)}
           />
           <Input
-            containerStyle={styles.costFormInput}
+            containerStyle={styles.costFormInputContainer}
+            inputStyle={styles.costFormInput}
             autoCapitalize='none'
             keyboardType='numeric'
             label='Tax'
@@ -51,7 +66,8 @@ class CostFormComponent extends React.Component {
             onChangeText={(tax) => this.props.editTax(tax)}
           />
           <Input
-            containerStyle={styles.costFormInput}
+            containerStyle={styles.costFormInputContainer}
+            inputStyle={styles.costFormInput}
             autoCapitalize='none'
             keyboardType='numeric'
             label='Tip'
@@ -67,15 +83,17 @@ class CostFormComponent extends React.Component {
             checked={calculateTip.checked}
             title={
               <View style={styles.costFormTipCheckBoxView}>
-                <Text style={styles.costFormTipCheckBoxText}>
-                  Calculate tip:
-                </Text>
-                <Input style={styles.costFormTipCheckBoxInput}
+                <Input
+                  containerStyle={styles.costformTipCheckBoxContainer}
+                  inputContainerStyle={styles.costFormTipCheckBoxInputContainer}
+                  inputStyle={styles.costFormTipCheckBoxInput}
                   autoCapitalize='none'
                   defaultValue='20'
                   keyboardType='numeric'
+                  label='Calculate tip:'
                   rightIcon={
                     <Icon
+                      color='floralwhite'
                       name='percent'
                       size={20}
                     />
@@ -85,7 +103,8 @@ class CostFormComponent extends React.Component {
                   onChangeText={(percent) => this.props.editTipPercent(percent)}
                 />
                 <CheckBox
-                  containerStyle={styles.costFormTipTaxCheckBox}
+                  containerStyle={styles.costFormTipIncludeTax}
+                  textStyle={styles.costFormTipIncludeTaxTitle}
                   checked={calculateTip.includeTax}
                   title='include tax'
                   onPress={() => this.props.checkIncludeTax()}
