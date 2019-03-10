@@ -47,6 +47,7 @@ class AssignmentComponent extends React.Component {
     const {
       assignee,
       checked,
+      statuses,
       items,
       assignments,
       navigation,
@@ -76,7 +77,7 @@ class AssignmentComponent extends React.Component {
               containerStyle={styles.assignmentAssignButtonCtr}
               disabled={
                 !assignee ||
-                checked.every(check => false)
+                checked.every(check => !check)
               }
               title='Assign'
               onPress={() => this.props.assignCheckedItems()}
@@ -99,7 +100,10 @@ class AssignmentComponent extends React.Component {
                 items.map((item, index) => (
                   <AssignmentItemComponent
                     key={index}
-                    assigned={this.numAssignments(index)}
+                    badge={{
+                      status: statuses[index],
+                      value: this.numAssignments(index),
+                    }}
                     checked={checked[index]}
                     item={item}
                     index={index}
@@ -109,40 +113,6 @@ class AssignmentComponent extends React.Component {
             </View>
           </ScrollView>
         </View>
-        {
-          assignments.size != 0 &&
-          <View style={styles.assignmentGroupsView}>
-            <ScrollView
-              style={styles.assignmentGroupsScrollView}
-              ref={(ref) => this.groupsScrollView = ref}
-              onContentSizeChange={(width, height) => {
-                this.groupsScrollView.scrollTo({x: 0, y: height, animated: true})
-              }}>
-              <View style={styles.assignmentGroupsSubView}>
-                {
-                  [...assignments.keys()].map(person => (
-                    <Card
-                      containerStyle={styles.assignmentGroupCard}
-                      titleStyle={styles.assignmentGroupTitle}
-                      key={person}
-                      title={person}>
-                      {
-                        assignments.get(person).map(index => (
-                          <ListItem
-                            containerStyle={styles.assignmentGroupItem}
-                            titleStyle={styles.assignmentGroupItemTitle}
-                            key={index}
-                            title={items[index].name}>
-                          </ListItem>
-                        ))
-                      }
-                    </Card>
-                  ))
-                }
-              </View>
-            </ScrollView>
-          </View>
-        }
         {
           <Button
             containerStyle={styles.assignmentNavigateButton}
@@ -163,10 +133,11 @@ const mapStateToProps = (state) => {
   const {
     assignee,
     checked,
+    statuses,
     items,
     assignments,
   } = state.assignment;
-  return { assignee, checked, items, assignments };
+  return { assignee, checked, statuses, items, assignments };
 }
 
 const mapDispatchToProps = (dispatch) => (

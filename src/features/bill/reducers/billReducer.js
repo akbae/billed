@@ -17,15 +17,19 @@ const getCalculatedTip = (costs, calculateTip) => {
   return calculateTip.percent / 100.0 * baseCost;
 }
 
-const getNumSplits = (index, assignments) => {
-  return [...assignments.values()].reduce((acc, assignment) => (
-    acc + (assignment.includes(index))
-  ), 0);
+const getNumSplits = (items, assignments) => {
+  const numSplits = items.map(_ => 0);
+  for(const assignment of assignments.values()) {
+    assignment.forEach(itemIndex => {
+      numSplits[itemIndex]++;
+    })
+  }
+  return numSplits;
 }
 
 const getSubtotal = (assignment, items) => {
   return assignment.reduce((acc, index) => (
-    acc + items[index].price / getNumSplits(index, assignment)
+    acc + items[index].price / items[index].numSplits
   ), 0.0);
 };
 
@@ -62,6 +66,13 @@ const billReducer = (state = INITIAL_STATE, action) => {
       const { subtotal, tax, tip, total } = state;
       const { assignments, items } = action.payload;
 
+      const numSplits = getNumSplits(items, assignments);
+      const updatedItems = items.map((item, index) => (
+        Object.assign({}, item,
+          { numSplits: numSplits[index] }
+        )
+      ));
+
       // Assumption that subtotal is correct due to previous validation
       // If subtotal was not provided, calculate from items
       let _subtotal = 0;
@@ -69,13 +80,13 @@ const billReducer = (state = INITIAL_STATE, action) => {
         _subtotal = subtotal;
       } else {
         for(const assignment of assignments.values()) {
-          _subtotal += getSubtotal(assignment, items);
+          _subtotal += getSubtotal(assignment, updatedItems);
         };
       }
 
       const bills = new Map();
       assignments.forEach((assignment, assignee) => {
-        const billSubtotal = getSubtotal(assignment, items);
+        const billSubtotal = getSubtotal(assignment, updatedItems);
         const billTotal = getBillTotal(billSubtotal, _subtotal, total);
         let billTax = getResponsibleAmount(tax, billSubtotal, _subtotal);
         let billTip = getResponsibleAmount(tip, billSubtotal, _subtotal);
@@ -87,13 +98,15 @@ const billReducer = (state = INITIAL_STATE, action) => {
         }
         bills.set(assignee, Object.assign({},
           {
-            items: items.filter((item, index) => assignment.includes(index)),
+            items: updatedItems.filter((item, index) => (
+              assignment.includes(index)
+            )),
             subtotal: billSubtotal,
             tax: billTax,
             tip: billTip,
             total: billTotal,
           }
-        ))
+        ));
       });
 
       return Object.assign({}, state, {

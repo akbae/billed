@@ -32,25 +32,18 @@ const assignments = [
 
 export const preloadedState = {
   costForm: {
-    subtotal: '',
+    calculateTip: {
+      checked: true,
+      percent: 20,
+      includeTax: true,
+    },
+    subtotal: '18',
     tax: '1.50',
-    tip: '3.50',
-    total: '20',
+    tip: '',
+    total: '',
   },
   itemForm: {
     items: items,
     itemNamingCount: 1,
   },
-  assignment: {
-    unassignedItems: items,
-    originalItems: items,
-    assignments: [],
-  },
-  bill: {
-    assignments: assignments,
-    subtotal: NaN,
-    tax: 3.50,
-    tip: 1.50,
-    total: 20,
-  }
 }

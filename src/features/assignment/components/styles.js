@@ -65,30 +65,12 @@ const styles = StyleSheet.create({
     color: 'floralwhite',
     flex: 0,
   },
-  assignmentGroupsView: {
-    flex: 1,
-  },
-  assignmentGroupsScrollView: {
-  },
-  assignmentGroupsSubView: {
-  },
-  assignmentGroupCard: {
-    backgroundColor: 'black',
-    padding: 5,
-  },
-  assignmentGroupTitle: {
-    color: 'floralwhite',
-  },
-  assignmentGroupItem: {
-    backgroundColor: 'black',
-    padding: 3,
-    margin: 5,
-  },
-  assignmentGroupItemTitle: {
-    color: 'floralwhite',
-  },
   assignmentNavigateButton: {
+    bottom: 10,
+    left: 0,
     margin: 10,
+    position: 'absolute',
+    right: 0,
   },
 });
 

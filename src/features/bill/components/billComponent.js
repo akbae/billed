@@ -41,8 +41,8 @@ class BillComponent extends React.Component {
                               titleStyle={styles.billCardItemName}
                               rightSubtitleStyle={styles.billCardItemPrice}
                               key={itemIndex}
-                              title={item.name}
-                              rightSubtitle={item.price.toFixed(2)}
+                              title={item.name + ((item.numSplits > 1) ? ' / ' + item.numSplits : '')}
+                              rightSubtitle={(item.price / item.numSplits).toFixed(2)}
                             />
                           ))
                         }

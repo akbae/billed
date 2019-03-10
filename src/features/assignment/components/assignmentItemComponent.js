@@ -10,7 +10,7 @@ import { checkItem } from '../actions/assignmentActions';
 
 class AssignmentItemComponent extends React.Component {
   render() {
-    const { assigned, checked, item, index } = this.props;
+    const { badge, checked, item, index } = this.props;
 
     return (
       <ListItem
@@ -34,10 +34,9 @@ class AssignmentItemComponent extends React.Component {
           />
         }
         rightElement={
-          assigned > 0 &&
+          badge.value > 0 &&
           <Badge
-            status='success'
-            value={assigned}
+            {...badge}
           />
         }
       />

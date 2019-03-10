@@ -11,17 +11,26 @@ import { SUBMIT_ITEMS } from '../../form/actions/actionTypes';
 const INITIAL_STATE = {
   assignee: '',
   checked: [], // Item index to whether it is checked
+  statuses: [], // Status of items: 'error' => recently reset, 'primary' => added previously, 'success' => recently added
   items: [],
   assignments: new Map(),
 };
 
-const resetChecked = (items) => {
-  const changedChecked = [];
+const initChecked = (items) => {
+  const checked = [];
   for(var i = 0; i < items.length; i++) {
-    changedChecked.push(false);
+    checked.push(false);
   }
-  return changedChecked;
+  return checked;
 };
+
+const initStatuses = (items) => {
+  const statuses = [];
+  for(var i = 0; i < items.length; i++) {
+    statuses.push('primary');
+  }
+  return statuses;
+}
 
 const assignmentReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -30,10 +39,13 @@ const assignmentReducer = (state = INITIAL_STATE, action) => {
       const { items } = action.payload;
 
       // Set all item indices to checked: false
-      const checked = resetChecked(items);
+      const checked = initChecked(items);
+      // Set all badge statuses to primary
+      const statuses = initStatuses(items);
 
       return Object.assign({}, state, {
         checked,
+        statuses,
         items,
       });
     }
@@ -56,7 +68,7 @@ const assignmentReducer = (state = INITIAL_STATE, action) => {
       });
     }
     case ASSIGN_CHECKED_ITEMS: {
-      const { assignee, checked, items, assignments } = state;
+      const { assignee, checked, statuses, items, assignments } = state;
 
       // If empty assignee or assignee is already assigned
       if(assignments.size > 0 && assignments.has(assignee)) {
@@ -78,26 +90,49 @@ const assignmentReducer = (state = INITIAL_STATE, action) => {
       const changedAssignments = new Map(assignments);
       changedAssignments.set(assignee, assignment);
 
-      const changedChecked = resetChecked(items);
+      // Uncheck everything
+      const changedChecked = initChecked(items);
+      const changedStatuses = statuses.map((status, index) => {
+        // Change recent assignment to success
+        if(assignment.includes(index)) {
+          return 'success';
+        }
+        // Change previous assignments to primary
+        if(status === 'success') {
+          return 'primary';
+        }
+        return status;
+      });
 
       return Object.assign({}, state, {
         assignee: '',
         checked: changedChecked,
+        statuses: changedStatuses,
         assignments: changedAssignments,
       });
     }
     case RESET_ASSIGNMENT: {
-      const { checked, items, assignments } = state;
+      const { checked, statuses, items, assignments } = state;
 
-      const changedChecked = resetChecked(items);
+      const changedChecked = initChecked(items);
       // No items checked
       if(checked.every(check => !check)) {
+        const latestAssignment = [...assignments.values()].slice(-1);
+        const changedStatuses = statuses.map(status => {
+          // Change latest assignment to error
+          if(status === 'success') {
+            return 'error';
+          }
+          return status;
+        });
+
         // Remove latest assignment
         const changedAssignments = new Map([...assignments.entries()].slice(0, -1))
 
         return Object.assign({}, state, {
           assignee: '',
           checked: changedChecked,
+          statuses: changedStatuses,
           assignments: changedAssignments,
         });
       }
@@ -111,7 +146,7 @@ const assignmentReducer = (state = INITIAL_STATE, action) => {
     case RESET_ALL: {
       const { items } = state;
 
-      const changedChecked = resetChecked(items);
+      const changedChecked = initChecked(items);
 
       return Object.assign({}, state,
         {
