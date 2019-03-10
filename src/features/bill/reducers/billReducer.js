@@ -1,6 +1,5 @@
 import { SUBMIT_ASSIGNMENTS } from '../../assignment/actions/actionTypes';
 import { SUBMIT_COSTS } from '../../form/actions/actionTypes';
-import { Alert } from 'react-native';
 
 const INITIAL_STATE = {
   bills: new Map(),
@@ -10,8 +9,15 @@ const INITIAL_STATE = {
   total: 0.0,
 };
 
+const getCalculatedTip = (costs, calculateTip) => {
+  // Include tax if checked
+  const baseCost = (calculateTip.includeTax)
+    ? costs.subtotal + costs.tax
+    : costs.subtotal;
+  return calculateTip.percent / 100.0 * baseCost;
+}
+
 const getSubtotal = (group) => {
-  Alert.alert(group.map(item => item.price).toString(), group.map(item => item.price).reduce((a, b) => (a + b), 0.0).toString())
   return group.map(item => item.price).reduce((a, b) => (a + b), 0.0)
 };
 
@@ -29,7 +35,12 @@ const billReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     // Invoked in CostFormComponent
     case SUBMIT_COSTS: {
-      const { costs } = action.payload;
+      const { costs, calculateTip } = action.payload;
+
+      if(calculateTip.checked) {
+        costs.tip = getCalculatedTip(costs, calculateTip);
+        costs.total = costs.subtotal + costs.tax + costs.tip;
+      }
 
       // Total is required
       if(costs.total === 0) {
