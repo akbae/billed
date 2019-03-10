@@ -1,30 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  // UserFormComponent
-  userFormView: {
-    alignItems: 'stretch',
-    flex: 1,
-  },
-  userFormScrollView: {
-  },
-  userFormSubView: {
-    alignItems: 'stretch',
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  userFormListItem: {
-    width: 180,
-  },
-  userFormListItemInput: {
-  },
-  userFormAddUserButton: {
-    margin: 10,
-  },
-  userFormNavigateButton: {
-    margin: 10,
-  },
   // CostFormComponent
   costFormView: {
     flex: 1,
