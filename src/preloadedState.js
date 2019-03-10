@@ -44,7 +44,7 @@ export const preloadedState = {
   assignment: {
     unassignedItems: items,
     originalItems: items,
-    assignedItemGroups: [],
+    assignments: [],
   },
   bill: {
     assignments: assignments,
