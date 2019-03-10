@@ -10,13 +10,16 @@ import {
   editTax,
   editTip,
   editTotal,
+  checkCalculateTip,
+  editTipPercent,
+  checkIncludeTax,
   submitCosts,
 } from '../actions/costFormActions';
 import styles from './styles';
 
 class CostFormComponent extends React.Component {
   render() {
-    const { subtotal, tax, tip, total, navigation } = this.props;
+    const { calculateTip, subtotal, tax, tip, total, navigation } = this.props;
     return (
       <View style={styles.costFormView}>
         <View style={styles.costFormSubView}>
@@ -25,7 +28,6 @@ class CostFormComponent extends React.Component {
             autoCapitalize='none'
             keyboardType='numeric'
             label='Subtotal'
-            placeholder='(optional)'
             selectTextOnFocus={true}
             value={subtotal}
             onChangeText={(subtotal) => this.props.editSubtotal(subtotal)}
@@ -35,7 +37,6 @@ class CostFormComponent extends React.Component {
             autoCapitalize='none'
             keyboardType='numeric'
             label='Total'
-            placeholder='(required)'
             selectTextOnFocus={true}
             value={total}
             onChangeText={(total) => this.props.editTotal(total)}
@@ -45,7 +46,6 @@ class CostFormComponent extends React.Component {
             autoCapitalize='none'
             keyboardType='numeric'
             label='Tax'
-            placeholder='(optional)'
             selectTextOnFocus={true}
             value={tax}
             onChangeText={(tax) => this.props.editTax(tax)}
@@ -55,42 +55,49 @@ class CostFormComponent extends React.Component {
             autoCapitalize='none'
             keyboardType='numeric'
             label='Tip'
-            placeholder='(optional)'
             selectTextOnFocus={true}
             value={tip}
             onChangeText={(tip) => this.props.editTip(tip)}
           />
         </View>
-        <CheckBox
-          containerStyle={styles.costFormTipCheckBox}
-          checked={false}
-          title={
-            <View style={styles.costFormTipCheckBoxView}>
-              <Text style={styles.costFormTipCheckBoxText}>
-                Calculate tip:
-              </Text>
-              <Input style={styles.costFormTipCheckBoxInput}
-                autoCapitalize='none'
-                keyboardType='numeric'
-                rightIcon={
-                  <Icon
-                    name='percent'
-                    size={20}
-                  />
-                }
-                selectTextOnFocus={true}
-              />
-              <CheckBox
-                containerStyle={styles.costFormTipTaxCheckBox}
-                checked={false}
-                title='with tax'
-              />
-            </View>
-          }
-        />
+        {
+          !tip && !total &&
+          <CheckBox
+            containerStyle={styles.costFormTipCheckBox}
+            checked={calculateTip.checked}
+            title={
+              <View style={styles.costFormTipCheckBoxView}>
+                <Text style={styles.costFormTipCheckBoxText}>
+                  Calculate tip:
+                </Text>
+                <Input style={styles.costFormTipCheckBoxInput}
+                  autoCapitalize='none'
+                  defaultValue='20'
+                  keyboardType='numeric'
+                  rightIcon={
+                    <Icon
+                      name='percent'
+                      size={20}
+                    />
+                  }
+                  selectTextOnFocus={true}
+                  value={calculateTip.percent.toString()}
+                  onChangeText={(percent) => this.props.editTipPercent(percent)}
+                />
+                <CheckBox
+                  containerStyle={styles.costFormTipTaxCheckBox}
+                  checked={calculateTip.includeTax}
+                  title='include tax'
+                  onPress={() => this.props.checkIncludeTax()}
+                />
+              </View>
+            }
+            onPress={() => this.props.checkCalculateTip()}
+          />
+        }
         <Button
           containerStyle={styles.costFormNavigateButton}
-          disabled={!total}
+          disabled={!((subtotal && tax && calculateTip.checked) || total)}
           title='To Items'
           onPress={() => {
             this.props.submitCosts({
@@ -98,7 +105,7 @@ class CostFormComponent extends React.Component {
               tax,
               tip,
               total,
-            })
+            }, calculateTip)
             navigation.navigate('ItemForm');
           }}
         />
@@ -108,8 +115,8 @@ class CostFormComponent extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const { subtotal, tax, tip, total } = state.costForm;
-  return { subtotal, tax, tip, total };
+  const { calculateTip, subtotal, tax, tip, total } = state.costForm;
+  return { calculateTip, subtotal, tax, tip, total };
 }
 
 const mapDispatchToProps = (dispatch) => (
@@ -118,6 +125,9 @@ const mapDispatchToProps = (dispatch) => (
     editTax,
     editTip,
     editTotal,
+    checkCalculateTip,
+    editTipPercent,
+    checkIncludeTax,
     submitCosts,
   }, dispatch)
 );
